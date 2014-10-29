@@ -1,0 +1,18 @@
+{
+  "firefox": {
+    "binary": ""
+  },
+  "converter": {
+    "path": ".\\vendor\\concmd\\concmd.exe",
+    "argument": "/i:utf8 /f:t /o:utf8"
+  },
+  "login": {
+    "account": "",
+    "password": ""
+  },
+  "novel": {
+  	"cover_name_pre": "小說名稱：",
+	"book_name_pre": "本卷名稱："
+  }
+}
+
