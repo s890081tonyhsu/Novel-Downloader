@@ -2,14 +2,14 @@ def novel_prefix(novel)
 	return novel.values
 end
 
-def converter(fileInputPath, fileInputBase, data)
+def converter(fileInputPath, fileInputBase, arguments)
 	begin
 		if  Dir.glob(fileInputPath).empty?
 			raise "cannot find file"
 		end
-		system("#{data["converter"]["path"].gsub('/', '\\')} #{converter["path"]} #{fileInputPath.gsub('/', '\\')} .\\converted\\#{fileInputBase}")
+		system("#{arguments["converter"]["path"].gsub('/', '\\')} #{arguments["converter"]["argument"]} #{fileInputPath.gsub('/', '\\')} .\\converted\\#{fileInputBase}")
 		data = Dir.glob("./converted/" + fileInputBase)
-		example = novel_prefix(data["novel"])
+		example = novel_prefix(arguments["novel"])
 		data.each do |path|
 			file = File.open(path, "r")
 			if !file
@@ -18,8 +18,8 @@ def converter(fileInputPath, fileInputBase, data)
 			name = Array.new
 			while name.length < 2
 				line = file.gets.gsub(/\n$/,"")
-				if (line.include? example[(name.length + 1)])
-					line.slice! example[name.length + 1]
+				if (line.include? example[name.length])
+					line.slice! example[name.length]
 					name.push(line)
 				end
 			end
