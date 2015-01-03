@@ -23,7 +23,7 @@ def converter(fileInputPath, fileInputBase, arguments)
 					name.push(line)
 				end
 			end
-			name = name.join(" ") + ".txt"
+			name = name.join(" ").gsub(/[\x21-\x2f]|[\x3a-\x40]/, '') + ".txt"
 			file.close
 			File.rename(path, "./converted/" + name)
 		end
