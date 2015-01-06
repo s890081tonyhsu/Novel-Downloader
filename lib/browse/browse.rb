@@ -97,6 +97,11 @@ def get_novel_data(browser)
 	end
 end
 
+def getCookie(browser)
+	loginToPage(browser, data)
+	cookie = browser.execute_script("return document.cookie");
+	return cookie
+end
 
 def download_novel_book(browser, id, book, data)
 	loginToPage(browser, data)
