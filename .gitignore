@@ -1,5 +1,2 @@
-test.rb
-converted/
-downloaded/
-arguments.json
+test*.*
 Gemfile.lock
