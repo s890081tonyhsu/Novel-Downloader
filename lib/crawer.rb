@@ -1,21 +1,18 @@
+require './lib/commonFunc.rb'
 require 'open-uri'
 require 'nokogiri'
-require 'zhconv'
-
-def zhTWConverter(str)
-  return ZhConv.convert('zh-tw', str)
-end
 
 class NovelCrawer
-	def initialize (novelID, websiteParams)
-    @novelLinks = websiteParams.clone
+	def initialize(novelID, websiteParams)
+    @novelLinks = deep_copy(websiteParams)
     @novelLinks.each do |link|
-      link[1].gsub(/\{novelID\}/, novelID)
+      link[1].gsub!(/\{novelID\}/, novelID)
     end
+    puts websiteParams
   end
 
   def get_novel_cover(show = false)
-    @request = open(@novelLinks['cover'])
+    @request = open(URI.join(@novelLinks['base'], @novelLinks['cover']).to_s)
     @data = Nokogiri::HTML(@request)
     novelCover = {}
     novelCover['title'] = @data.search('h1').children[0].to_s
@@ -32,7 +29,7 @@ class NovelCrawer
   end
 
   def get_novel_index
-    @request = open(@novelLinks['index'])
+    @request = open(URI.join(@novelLinks['base'], @novelLinks['index']).to_s)
     @data = Nokogiri::HTML(@request)
     novelIndex = {}
     indexTemp = {}
@@ -58,7 +55,7 @@ class NovelCrawer
             subTemp['num'] = sub.attributes['href'].value.split('/')[4]
             indexTemp['sub'].push(subTemp)
           end
-          novelIndex[indexTemp['num']] = indexTemp.clone
+          novelIndex[indexTemp['num']] = deep_copy(indexTemp)
           indexTemp = {}
         else
           next
@@ -68,32 +65,25 @@ class NovelCrawer
     return novelIndex
   end
 
-  def get_novel_chapter(chapter, title = false)
+  def get_novel_chapter(chapter)
     content = ''
-    if title
-      content << chapter['name']
-      content << "\n====\n"
-    end
+    content << '## '+chapter['name']
+    content << "\n"
     if chapter['sub'].length != 0
-      baseURL = @novelLinks['sub'].clone
-      baseURL.gsub!(/\{chapterID\}/, chapter['num'])
       chapter['sub'].each do |sub|
-        content << get_novel_sub(baseURL, sub['num'])
+        content << self.get_novel_sub(chapter['num'], sub['num'])
       end
     end
   end
 
-  def get_novel_sub(baseURL, subID, title = false)
-    customLink = baseURL.clone.gsub!(/\{subID\}/, subID)
+  def get_novel_sub(chapterID, subID)
+    baseURL = deep_copy(@novelLinks['base'] + @novelLinks['sub']).gsub!(/\{chapterID\}/, chapterID)
+    customLink = URI.join(@novelLinks['base'], deep_copy(baseURL).gsub!(/\{subID\}/, subID))
     content = ''
     @request = open(customLink)
     @data = Nokogiri::HTML(@request)
-    if title
-      content << @data.search('h1').text
-      content << "\n====\n\n"
-    end
-    content << @data.search('.list_menu_title').text
-    content << "\n----\n\n"
+    content << '### '+@data.search('.list_menu_title').text.match(/\xE3\x80\x90.*\xE3\x80\x91(.*)/)[1]
+    content << "\n"
     @data.search('#ChapterBody').children.each do |line|
       if line.name == 'img'
         src = URI.join(@novelLinks['base'], line.attributes['src'].value).to_s
@@ -101,9 +91,10 @@ class NovelCrawer
         content << '!['+alt+']('+src+')'
         content << "\n"
       else
-        content << line.text
+        content << '    '+line.text
         content << "\n"
       end
     end
     return content
   end
+end

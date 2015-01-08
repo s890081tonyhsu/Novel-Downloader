@@ -1,0 +1,10 @@
+{
+	"default": "sfacg",
+	"sfacg": {
+		"base": "http://book.sfacg.com/",
+		"cover": "Novel/{novelID}",
+		"index": "Novel/{novelID}/MainIndex",
+		"chapter": "Novel/{novelID}/{chapterID}",
+		"sub": "Novel/{novelID}/{chapterID}/{subID}"
+	}
+}
