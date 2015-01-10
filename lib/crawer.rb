@@ -89,10 +89,10 @@ class NovelCrawer
         src = URI.join(@novelLinks['base'], line.attributes['src'].value).to_s
         alt = line.attributes['alt'].value.to_s
         content << '!['+alt+']('+src+')'
-        content << "\n"
+        content << "  \n"
       else
-        content << '    '+line.text
-        content << "\n"
+        content << "\xE2\x80\x83\xE2\x80\x83"+line.text
+        content << "  \n"
       end
     end
     return content
