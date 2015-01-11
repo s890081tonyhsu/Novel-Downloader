@@ -2,9 +2,10 @@ require './lib/commonFunc.rb'
 require 'fileutils'
 
 class NovelBook
-  def initialize(novelCrawer, novelID)
+  def initialize(novelCrawer, novelID, path = nil)
+    path ||= './novelData'
     @crawer = novelCrawer
-    @path = './novelData/'+novelID
+    @path = path+'/'+novelID
     if(Dir.exist?(@path) && File.exist?(@path+'/cover.json') && File.exist?(@path+'/index.json'))
       self.updateCheck
     else
