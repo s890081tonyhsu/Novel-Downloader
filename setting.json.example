@@ -1,5 +1,8 @@
 {
-	"default": "sfacg",
+	"default": {
+		"source": "sfacg",
+		"folder": "./novelData"
+	},
 	"sfacg": {
 		"base": "http://book.sfacg.com/",
 		"cover": "Novel/{novelID}",

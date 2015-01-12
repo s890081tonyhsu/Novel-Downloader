@@ -3,7 +3,7 @@ chcp | findstr 65001
 if NOT %ERRORLEVEL% == 0 GOTO Error
 
 :Start
-ruby bin\%1.rb %2 %3
+ruby bin\%1.rb %2 %3 %4 %5 %6 %7 %8 %9
 GOTO End
 
 :Error

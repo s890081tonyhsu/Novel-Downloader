@@ -12,7 +12,6 @@ Is it finished?
 Not yet? We only finished something below
 
 * Convert zh-CN to zh-TW
-* Login to sfacg
 * Get novel details by number
 
 How to use it?
@@ -22,6 +21,15 @@ How to use it?
 * Use bundler to install needed gems.
 
 ```bash
+  # the following command is for using this program
+  # windows -> novel.bat, unix -> novel.sh
+
+  # clone of update novel, you can use crawer
+  novel crawer {novelID} {savePath}
+  
+  # show novel list
+  novel scanner from_json {novel list json}
+  novel scanner from_folder {novel save folder}
 ```
 
 How can you support us?
